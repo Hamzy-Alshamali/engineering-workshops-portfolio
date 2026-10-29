@@ -1,0 +1,21 @@
+﻿Version,Trial,Actual digit,Predicted digit,Score,Correct/incorrect
+Baseline,1,0,0,0.999,correct
+Baseline,2,1,1,0.994,correct
+Baseline,3,2,2,1.0,correct
+Baseline,4,3,3,0.999,correct
+Baseline,5,4,4,1.0,correct
+Baseline,6,5,5,0.999,correct
+Baseline,7,6,6,0.996,correct
+Baseline,8,7,7,1.0,correct
+Baseline,9,8,8,0.999,correct
+Baseline,10,9,9,0.979,correct
+Final,1,0,0,1.0,correct
+Final,2,1,1,0.99,correct
+Final,3,2,2,0.998,correct
+Final,4,3,3,0.994,correct
+Final,5,4,4,1.0,correct
+Final,6,5,5,0.996,correct
+Final,7,6,6,0.968,correct
+Final,8,7,7,1.0,correct
+Final,9,8,8,0.988,correct
+Final,10,9,9,0.991,correct

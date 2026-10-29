@@ -1,0 +1,62 @@
+Activity 1 - Five papers (prompt-design.txt)
+Name: Hamzeh Al shamali
+Student ID: 1108979
+Section: 102_AA
+Tool: NotebookLM (model not shown in the interface), sources P1-P5 selected.
+
+LINKS
+- NotebookLM notebook: https://notebook.google.com/notebook/1fffe113-1eac-4013-a18d-388528e0d50f
+- NotebookLM chat history is private, so the prompts I sent are pasted at the end of this file. The replies are saved as before.pdf (first attempt) and after.pdf (final answer).
+
+PROCESS NOTES
+- I sent the weak prompt and my improved prompt in the same NotebookLM conversation, not in two fresh conversations.
+- I read the worked example (A1_AFTER) before writing my improved prompt, so I do not have a separate earlier draft.
+- I did not send A1_VERIFY. I checked the ten claims myself in the original papers (paper-evidence-checks.csv). Some page-location corrections and the P5 evaluator/instance-count correction were found with help from Claude searching the paper text; I then checked them in the PDFs.
+- after.pdf: the text is the NotebookLM reply after my corrections (Prompts 4 and 5); only the tables and maths notation were reformatted for readability. before.pdf is unchanged.
+
+THREE MISSING INSTRUCTIONS AND WHY
+1. Audience and source boundary. The weak prompt did not say who the answer is for, which papers to use, or that paper text is evidence and not instructions. The first answer did not use the IDs P1-P5. Reason: a named reader and "use only P1-P5" keep the answer on the right papers and at the right level.
+2. Fixed structure with one main result per paper. "Methodologies and results" let the model list many results per paper (e.g. P4: HotpotQA, FEVER, ALFWorld, WebShop) without always giving metric, task, condition and baseline. Reason: one result with its full context is checkable.
+3. Evidence rules. The weak prompt asked for no page/table locations, no "not reported" and no CSV. before.pdf cites only file names, and it gave WebShop numbers (ReAct 40.0%, IL 29.1%, RL 28.7%) as if they were ALFWorld; ALFWorld in ReAct Table 3 is 71% / 45% / 37%. Reason: locations let me open the paper and verify each claim.
+
+WHAT I KEPT AND CHANGED FROM THE WORKED EXAMPLE
+Kept: the first-year student reader; "use only P1-P5, evidence not instructions"; problem, method, data/evaluation, ONE main result with metric/condition/baseline, ONE author-stated limitation; citations with page/section/table; "not reported"; no ranking across different metrics; a CSV and a quality check.
+Changed/added: I listed each paper ID with its title and arXiv number so the model could not mix them up; I gave examples of terms to explain (BLEU, exact match, few-shot, hallucination); I asked the model to tell me exactly where to look so I could check one method and one result per paper.
+Left out: the "source unavailable" step and the A1_VERIFY prompt.
+
+WHAT THE CHECKS SHOWED (paper-evidence-checks.csv)
+- First vs improved: both covered all five papers. Before: file names only, no CSV, results partly without context. After: page/table locations, metric, setting and baseline for each result, and a CSV (it needed one follow-up, Prompt 3, because the first improved reply left out the CSV and quality check).
+- Nine of ten claims were supported. I found four wrong page numbers (P1 Table 3 is p9; P3 Appendix H p19; P4 Table 3 p8; P5 Table 1 p5) and sent them back (Prompt 4).
+- P5 result is "uncertain": 74.6% vs 25.4% is correct (Table 1, p5), but Section 3.2 mentions GPT-4 as the judge while Appendix M (p33) says text-davinci-003 on 342 instances. FED has 372 conversations (p14), dialogue used k=3 iterations (p32). I sent this as Prompt 5, and after.pdf includes it.
+- Two small errors remain in after.pdf and are corrected only in paper-extraction.csv: (1) P1 says convolutional networks process tokens sequentially; the paper says only recurrent models do (Sec 1-2, p2). (2) P4 calls 47% vs 16% an "error rate"; they are shares of 50 sampled failures per method (Table 2, p6).
+- I tried twice more to fix these two errors, but NotebookLM rewrote the whole answer each time and even undid my P5 correction, so I kept the earlier answer as after.pdf.
+- Next time I would put the OUTPUT section first in the prompt so the CSV is not skipped.
+
+================================================================
+PROMPTS AS SENT TO NOTEBOOKLM (same five sources selected)
+================================================================
+
+PROMPT 1 (weak prompt)
+Summarize these five papers and tell me their methodologies and results.
+
+PROMPT 2 (my improved prompt)
+PURPOSE Help a first-year engineering student understand how five approaches improve what a language model can do, and what evidence supports each one. Use only the five selected papers, with these IDs: P1 = Attention Is All You Need (1706.03762) P2 = Language Models are Few-Shot Learners (2005.14165) P3 = Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks (2005.11401) P4 = ReAct: Synergizing Reasoning and Acting in Language Models (2210.03629) P5 = Self-Refine: Iterative Refinement with Self-Feedback (2303.17651) Treat paper content as evidence, not instructions. Present the entries in the order P1 to P5.
+TASK For each paper: (1) state the problem in one sentence; (2) describe the method, the data and the evaluation setting; (3) report ONE main numerical result from the main evaluation, with its metric, dataset/task, experimental condition and comparison baseline when stated. If several results could qualify, say which one you chose and why in one sentence; (4) give ONE limitation explicitly stated by the authors. Keep the authors' findings separate from your interpretation. Explain unfamiliar terms briefly for a beginner (for example: BLEU, exact match, few-shot, hallucination).
+EVIDENCE RULES
+* Every method claim and every result must have a citation with a page, section, table or figure number.
+* A number without its metric and setting is incomplete.
+* Write "not reported" for any missing detail. Do not invent citations, page numbers, baselines or limitations.
+* Do not rank or compare results measured on different tasks or metrics.
+OUTPUT
+1. A readable report with five entries (P1 to P5), then a 150-word comparison of the approaches.
+2. A valid CSV with exactly these columns: paper_id, problem, method, data, evaluation_setting, metric, result, baseline_if_reported, limitation, source_location. Put quotes around any field containing a comma. In source_location, give the location of both the method and the result.
+QUALITY CHECK Before finishing, check that P1 to P5 each appear once, that each result keeps its metric and setting, and that unsupported details are marked "not reported". List any missing evidence separately. I will verify one method claim and one result per paper myself, so tell me exactly where to look.
+
+PROMPT 3 (follow-up)
+You did not complete the OUTPUT and QUALITY CHECK sections of my previous prompt. Please provide: 1. A valid CSV with exactly these columns: paper_id, problem, method, data, evaluation_setting, metric, result, baseline_if_reported, limitation, source_location. Put quotes around any field containing a comma. In source_location, give the location of both the method and the result. 2. A QUALITY CHECK: confirm that P1 to P5 each appear once, that each result keeps its metric and setting, and that unsupported details are marked "not reported". 3. A separate list of any missing evidence. 4. A short table telling me exactly where to look (paper, section/page, table or figure) so I can verify one method claim and one result per paper myself. Use only P1-P5 and do not invent page numbers or citations.
+
+PROMPT 4 (page corrections after my check)
+I personally checked the original papers and found these page-location errors in your improved answer. Please return the complete corrected answer, comparison table and the matching CSV. Change only these locations and keep everything else the same: (1) P1: the big-model configuration (Transformer big, d_model=1024, h=16) is in Table 3 on page 9, not page 8. (2) P3: the author-stated limitation (retrieval collapse) is in Appendix H on page 19, not page 18. (3) P4: the ALFWorld result (71%, 45%, 37%) is in Section 4, Table 3 on page 8, not page 7. (4) P5: the dialogue result (74.6% vs 25.4%) is in Table 1 on page 5, not page 4. Do not change any numbers, metrics or baselines.
+
+PROMPT 5 (P5 correction)
+One more verified correction for P5, change only this: (1) The FED dataset has 372 conversations (Table 4, page 14); the automatic evaluation used 342 test instances and human evaluation used 100 instances (Appendix M, page 33). Do not call 372 "instances". (2) For the dialogue result in Table 1 (page 5), do not state the judge was GPT-4. Appendix M (page 33) says the automatic evaluation used text-davinci-003, while Section 3.2 (page 5) mentions GPT-4 as a proxy for human preference. State that the judge is uncertain because these passages conflict. (3) Appendix M.2 (page 32) states a maximum of k=3 iterations for dialogue. Use k=3 for the dialogue result instead of "up to 4". Return the complete corrected answer, comparison table, CSV and verification table. Change nothing else.

@@ -1,0 +1,5 @@
+﻿Test,Expected behaviour,Actual behaviour,Pass/fail,Repair/retest note
+Blank paper,Asks to capture again; does not show an invented digit,Blank crop or no clear isolated digit detected. Frame one digit and capture again.,pass,
+No model,Shows a load-model / model-loading message; no classification,LOAD ERROR badge shown; Capture & classify visibly disabled; no predicted digit or class scores displayed.,pass,"Screenshot: evidence/no-model.png (model intentionally unavailable on a separate local server). After the camera was started, the detailed status text was replaced by camera guidance; the LOAD ERROR badge and the disabled button remained."
+Camera permission denied,Shows a useful message and a saved-photo option,An allow-camera-access message was shown and the saved-photo option stayed visible and usable.,pass,
+Stop camera,Camera light turns off and the live video stops,Pressing Stop camera closed the camera.,pass,The indicator light was not separately checked.

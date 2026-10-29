@@ -1,0 +1,66 @@
+Activity 3 - Digit classifier (prompt-design.txt)
+Name: Hamzeh Al shamali
+Student ID: 1108979
+Section: 102_AA
+
+TOOL, MODEL AND LINK
+- App tool: ChatGPT. Model shown in the selector: GPT-6.1 Sol (Light).
+- Conversation link: https://chatgpt.com/s/cx_6ad48ce05f788191a7f3c6af7a42b198
+- Digit model: mnist-12.onnx (pretrained MNIST-12, same file and SHA-256 as MODEL_CARD.txt). The model was not retrained or changed.
+
+FILES
+- camera_v1.html: the first app I saved before any repairs (uses the files in v1-assets/). Only the asset paths were changed so it runs from this folder.
+- camera_baseline.html: the working app used for the baseline test (Ink threshold slider = 140).
+- camera_final.html: the same app with one change (Ink threshold slider = 97). The two files differ only in the slider value and the default Version label.
+- app.js, segment.js, style.css, serve.cjs and "Start Digit Lens.cmd": files needed to run the app.
+- evidence/: one screenshot for every trial (baseline_trialXX, final_trialXX), the rejected capture and the no-model test.
+
+FIRST PROMPT (A3_BEFORE)
+"I downloaded mnist-12.onnx. Create a web app that uses my laptop camera to recognise a handwritten digit."
+
+THREE MISSING INSTRUCTIONS AND WHY
+1. Classify only when I press "Capture & classify", using a frozen frame. The first app classified automatically every 250 ms, so the prediction kept changing and I could not tell which frame a result came from.
+2. Show the original crop, the exact 28x28 model input and all ten scores. This lets me see whether a mistake comes from the crop/preprocessing or from the model.
+3. Let me enter the actual digit, record each capture once and export a CSV with a Version label. This gives a clear before/after record that also keeps wrong results.
+Note: I did not write a separate draft before reading the worked example.
+
+IMPROVED PROMPT (sent in the conversation)
+Keep the current Digit Lens app and its image processing exactly as it is. Do not change preprocessing, the model or the threshold behaviour. Add only these features:
+1. A "Capture & classify" button. Classification must happen only when I press it (stop the automatic classification every 250 ms) and use the frozen frame.
+2. Show the original crop (the square guide area) next to an enlarged view of the exact 28x28 model input.
+3. Show all ten scores (digits 0-9) after softmax, not only the top three, plus the predicted digit. Add a note that a high score can still be wrong.
+4. A "Use a saved photo" file input as a fallback when the camera is unavailable or permission is denied.
+5. An "Actual digit" selector (0-9) and a "Record test" button that adds one row per capture (trial, actual_digit, predicted_digit, score, correct) and prevents recording the same capture twice. A "Download results CSV" button exports the rows. Show a "Version" label (baseline/final) that I can set.
+6. A clear message when no model is loaded or a blank crop is captured; classification stays disabled until the model is loaded.
+Return the complete updated files and tell me exactly what you changed.
+Difference from the worked example: the app already followed the model-card preprocessing (grayscale, separate ink, invert, bounding box, fit to about 20x20, centre in 28x28), so I asked only for the missing test features. It still uses ONNX Runtime Web 1.20.1 and loads the model automatically, not the 1.22.0 file picker in the model card.
+
+THE SINGLE CHANGE
+- Baseline file: camera_baseline.html, Ink threshold slider = 140.
+- Final file: camera_final.html, Ink threshold slider = 97. Nothing else was changed.
+- How the slider works: segment.js computes a cutoff from each image and adds (slider - 140) x 0.4, limited to 40-230. A pixel counts as ink if it is darker than the cutoff. So 97 lowers the cutoff by about 17: fewer grey pixels count as ink.
+- Reason: I wanted to see whether a stricter ink cutoff removes grey shadow/paper pixels from the 28x28 input and changes the predictions.
+
+FIXED TEST CONDITIONS (both versions, 18 October 2026)
+Microsoft Edge; phone camera (my laptop camera is broken); room lighting; about 20 cm, straight-on; the same ten cards 0-9 in dark ink on white paper; the same mnist-12.onnx.
+Rule: the first digit the app outputs for each card is the result, even if wrong. A "no clear digit" message is logged as a rejected capture, not a prediction.
+
+RESULTS (digit-tests.csv)
+- Baseline (140): 10/10 correct = 100%. Mean score 0.9965. 1 rejected capture.
+- Final (97): 10/10 correct = 100%. Mean score 0.9925. 0 rejected captures.
+- Change in accuracy: 0 percentage points.
+- Rejected capture: in the baseline run my first card 0 was thin and faint on a grey card, and the app said "No clear digit detected" (evidence/baseline_rejected_digit0.png). I redrew the 0 with a thicker pen and used that new card for both the baseline and final tests.
+- I forgot to switch the Version menu to "final" during the final run, so those screenshots say "baseline · sensitivity 97". I identified the final rows by the slider value (97) and labelled them Final in digit-tests.csv.
+- before.png = baseline trial 6 (card 5, predicted 5, 99.9%). after.png = final trial 6 (same card 5, predicted 5, 99.6%). Both show the crop, the exact 28x28 input and the prediction.
+- This run replaces my earlier test on 17 October, where I had kept only retried correct results. That earlier run is not used.
+
+NEGATIVE TESTS (digit-negative-tests.csv, final app)
+Blank paper asked me to capture again; no model showed LOAD ERROR with Capture & classify disabled (evidence/no-model.png); denied camera permission showed a message and the saved-photo option stayed usable; Stop camera turned the camera off. All passed.
+
+REFLECTION
+I changed the ink threshold from 140 to 97 because I wanted to see whether a stricter cutoff gives a cleaner 28x28 input. Before: 100%; after: 100%. Accuracy did not change and the mean score went down slightly (0.9965 to 0.9925), so in these conditions the change did not help.
+One limitation is that ten clear cards in one lighting setup are too easy: both versions scored 100%, so the test cannot show a difference. The faint 0 also showed that thin, weak strokes can be lost completely.
+Next I would test the same two settings on a harder set (thin pens, shadows, slightly tilted cards, other people's handwriting) with more cards per digit.
+
+HOW TO RUN
+Run "Start Digit Lens.cmd" (needs Node.js), then open http://127.0.0.1:8765/camera_baseline.html, camera_final.html or camera_v1.html. Loading ONNX Runtime needs internet.

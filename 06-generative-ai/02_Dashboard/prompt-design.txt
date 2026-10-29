@@ -1,0 +1,76 @@
+﻿Activity 2 - Dashboard (prompt-design.txt)
+Name: Hamzeh Al shamali
+Student ID: 1108979
+Section: 102_AA
+
+TOOL, MODEL AND LINKS
+- Tool: ChatGPT. Model shown in the selector: GPT-6 Astra (Medium).
+- Conversation (starts with "Make me a nice to-do-list dashboard."): https://chatgpt.com/s/cx_6ad27712bb888191b0349a07b97e86c1
+- Earlier shared link for the same work: https://chatgpt.com/s/cx_6ace35fcc55c8191ae7c16647b116e1b
+- I also used Codex to help refine the adapted prompt and organise my test notes.
+
+HOW THE WORK WENT
+1. Weak prompt: "Make me a nice to-do-list dashboard." ChatGPT built the "Daylight" dashboard.
+2. I asked (in Arabic) for that same design as one downloadable file with no improvements: dashboard_v1.html.
+3. I tested v1, then sent my adapted prompt (in Arabic; English translation below). ChatGPT returned the improved file and said its checks were simulated, not run in Chrome/Edge, so I did not count them. My own results are in dashboard-tests.csv.
+4. I asked for the page in English. That English version is dashboard_final.html.
+
+THREE MISSING INSTRUCTIONS AND WHY
+1. No task fields or acceptance tests for add/edit/complete/reopen/delete. Reason: exact count changes (3 total, 2 active, 1 completed) can be tested instead of judging the look.
+2. No saving, export/import or validation of bad backup files. Reason: I need to recover my tasks, and a broken file must not wipe them.
+3. No rule that counts cover all tasks, and nothing about keyboard or narrow screens. Reason: in v1 the Completed filter changed the totals from 4/3/1 to 1/0/1.
+
+MY OWN DRAFT
+I wrote this draft myself on 14 October, after reading a Claude example prompt to understand how to write prompts and after v1 was already generated. It is not the prompt that produced dashboard_final.html.
+
+BEGIN MY DRAFT
+ok so I'm in my first year and I have way too many courses and deadlines, I keep losing track of stuff. I need a to-do dashboard.
+Just one file, dashboard.html. HTML, CSS and JS all in the same file. I want to double-click it and see it in Chrome or Edge, that's it. Nothing online, no server, no sign-up, and no libraries from outside. If you can't send me the file, give me the code and tell me how to save it and open it, I'm not great with this stuff.
+About the tasks. Every task needs an id that's unique and never changes, even if I edit the task later. Then a title, a due date, a priority (low, medium or high) and done or not done. Course is optional, I won't always fill it in.
+When I add one, strip the extra spaces from the title. If the title is empty, don't add it and show me a short message. I also need to edit the title, course, due date and priority afterwards. And mark a task as done, undo that if I was wrong, and delete it.
+Search by title or course. Filters are All, Active, Completed and Overdue. Overdue means not done and the date is before today. If something is due today it is not overdue, so be careful with that one.
+Put three numbers at the top, total, active and completed. They count everything, even when I'm using a filter or a search.
+It should save to localStorage after every change. If saving fails I want a clear error, not silence. I also want to export all the tasks to a JSON file. For import I pick a JSON file, but a confirmation has to pop up before anything happens. It replaces my current tasks and I don't want that to happen by accident. Read the entire file first. Broken or wrong file? Show an error, and the old tasks stay exactly as they were.
+Text I type gets shown as is. Typing <b>hi</b> should display <b>hi</b> with the angle brackets, it must not turn into bold.
+Navy, white and red for the colours. I should be able to read everything without squinting. When I tab around with the keyboard I need a clear outline on what's selected. It has to work on a small phone as well.
+I'll test it myself. Empty title, nothing gets added. I'll add 3 active tasks and complete one, and it should say total 3, active 2, completed 1. Then I reopen it and active is 3 again. One task due yesterday and one due today, only yesterday's is overdue. I press F5 and the tasks are still there. I export, delete everything, import the file, and I get the same tasks back. And if I import a file with {broken in it, I see an error and my tasks stay.
+Start your answer with a few lines about your assumptions. Only ask me a question if you really can't continue without it. Then give me the full file, a short guide to run it, and a test checklist. Tell me which tests you really ran and which ones I have to run. Don't say it works in a browser if you didn't run it in one.
+END MY DRAFT
+
+ADAPTED PROMPT (English translation; sent in Arabic)
+I want to improve the Daylight dashboard you created for me so it suits a student managing tasks across several courses.
+I tested the first version. Adding tasks, rejecting empty and spaces-only titles, completing and reopening, persistence after refresh, deleting, editing the title and priority, and search all worked in the tests I ran. A title of <b>hi</b> was also displayed as plain text, and yesterday's task was marked overdue while tasks due today were not.
+I found these gaps:
+1. When I select Completed in the sidebar, the counters changed from 4 total / 3 incomplete / 1 completed to 1 / 0 / 1. I want the counters to cover all tasks, independent of filters and search.
+2. There is no JSON export of tasks.
+3. There is no JSON import or file validation.
+Create the improved version according to these requirements:
+- Each task has a stable unique ID, a title, an optional course name, a due date, a priority (low/medium/high) and a completion state.
+- Support add, edit, complete, reopen, delete and search, plus the filters All, Active, Completed and Overdue.
+- Overdue means an unfinished task whose date is before today in the local calendar; a task due today is not overdue.
+- Trim spaces from both ends of the title and reject empty titles. Display user input as text, never execute it as HTML.
+- Save changes to localStorage after every operation, and show a clear message if saving fails.
+- Export all task fields to JSON.
+- Import a valid exported file and replace the collection after user confirmation. Validate the entire file before changing any data; invalid JSON or invalid fields must show an error and leave the existing tasks unchanged.
+- Responsive design in navy, white and red, with clear labels, keyboard usability and a visible focus indicator.
+- Run locally in Chrome or Edge with no account, server, external library or paid API.
+Acceptance examples:
+- Completing one of 3 tasks gives 3 total, 2 active and 1 completed; reopening it restores 3 active.
+- The Overdue filter shows yesterday's unfinished task and does not show today's task.
+- Switching filters and searching does not change the global counters.
+- Refreshing the page preserves all fields and completion states.
+- Export, delete, then import restores the same data.
+- Importing a file containing {broken shows an error and leaves the existing tasks unchanged.
+Give me one complete downloadable file named dashboard.html containing HTML, CSS and JavaScript, with short run instructions and a test checklist. Keep the features that already work, and do not replace dashboard_v1.html, which represents the first attempt. Clearly distinguish the tests you actually executed from those I need to run myself.
+
+WHY I ADAPTED IT THIS WAY
+- I started from what I saw in v1: I listed what already worked and the three real gaps, so the AI would keep the working parts and fix only the problems.
+- I kept the worked example's requirements and acceptance examples, and added "switching filters and searching does not change the counters" because that was the v1 bug.
+- Course is optional, because not every task belongs to a course.
+
+WHAT MY TESTS SHOWED (dashboard-tests.csv, 15 tests, same sample tasks on both versions)
+- Both versions: add, edit, complete/reopen (3/2/1 then 3/3/0), delete (2/2/0), search, refresh, empty-title rejection, <b>hi</b> shown as text, narrow window and Tab/Enter/Escape all passed.
+- v1 failed the global counts test (Completed filter showed 1/0/1 instead of 4/3/1), had no Overdue filter, and had no export/import ("not available").
+- Final: counts stayed global; Overdue showed only yesterday's task; export of 5 tasks, delete all, then import restored 5/4/1 with the same IDs, fields and states; importing {broken showed "Import failed: Invalid JSON file" and kept the tasks.
+- Not tested by me: forced storage failure, and a full accessibility audit.
+- What still could improve: the import error message repeats one sentence, and the edit dialog needs scrolling in a very narrow window.

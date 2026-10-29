@@ -1,0 +1,16 @@
+SELECTED MODEL: MNIST-12 from the ONNX Model Zoo
+Download: https://media.githubusercontent.com/media/onnx/models/main/validated/vision/classification/mnist/model/mnist-12.onnx
+Source and documentation: https://github.com/onnx/models/tree/main/validated/vision/classification/mnist
+Filename: mnist-12.onnx
+Size checked: 26,143 bytes (about 26 kB)
+SHA-256: 5c688690f8bacf667d4c2074af5ad0646ca328d7ab03eccf944a65b320171bdd
+Checked: 2 October 2026
+
+Task: one handwritten digit, classes 0–9.
+Model: pretrained convolutional neural network. We use inference, not training.
+Input: one 28×28 grayscale image; bright digit, black background; float32 values 0–1; tensor shape [1,1,28,28]. This model takes one image at a time.
+Output: shape [1,10], raw class scores (logits), one for each digit in order 0–9. Use argmax for the predicted class. Use stable softmax for a displayed score; the score is not a guarantee.
+Webcam adaptation: crop one digit; grayscale; separate ink/background; invert dark ink on white; bounding box; preserve aspect ratio; fit approximately 20×20; centre with black padding to 28×28. This preprocessing is part of the app, not new training.
+Limitations: trained on MNIST, not general camera images. Shadows, tilted cards, printed fonts, multiple digits and clutter can cause errors. Evaluate on your own camera inputs.
+Runtime: ONNX Runtime Web 1.22.0, wasm, numThreads=1. Chrome or Edge on a laptop recommended. Use a local file picker to load model bytes. Runtime downloads need internet. Camera access requires browser permission and a secure context; local files often work, otherwise use instructor-provided localhost or HTTPS.
+No OpenAI API key, GPU or Firebase is required. Your chosen AI assistant (ChatGPT, Gemini or Claude) writes the app. The downloaded MNIST model classifies digits locally in your browser.
