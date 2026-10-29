@@ -73,5 +73,5 @@ Temperature-monitoring prototype for vaccine transport using an **Arduino Uno**,
 - **Design & documentation:** Tinkercad (3D + circuits), LaTeX/IEEE reports, FSM design
 
 ## Contact
-- LinkedIn: *(add link)*
-- Email: *(add email)*
+- LinkedIn: https://www.linkedin.com/in/hamza-al-shamali-77b61136b/
+- Email: hamoozzahr9@gmail.com
